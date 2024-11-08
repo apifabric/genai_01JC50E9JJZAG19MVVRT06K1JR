@@ -1,0 +1,122 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Address: Stores customer addresses, with customer reference.
+Customer: Stores customer details with balance and credit limit.
+Category: Categories for organizing products.
+Inventory: Inventory levels of products, linked with suppliers.
+Product: Available products, with pricing information for each item type.
+Supplier: Suppliers providing products to the system.
+Item: Items within each order, including quantity, unit price and amount.
+Order: Records customer orders with a reference to customers and the total amount.
+Payment: Payments made by customers for orders.
+Return: Returns processed for orders.
+Review: Reviews provided by customers for products.
+Shipment: Shipments associated with orders indicating delivery status.
+'''
+}
+
+Table Address {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    street VARCHAR 
+    city VARCHAR 
+    state VARCHAR 
+    zip_code VARCHAR 
+    }
+
+Table Customer {
+    id INTEGER [primary key]
+    name VARCHAR 
+    balance FLOAT 
+    credit_limit FLOAT 
+    }
+
+Table Category {
+    id INTEGER [primary key]
+    name VARCHAR 
+    }
+
+Table Inventory {
+    id INTEGER [primary key]
+    product_id INTEGER 
+    supplier_id INTEGER 
+    quantity_in_stock INTEGER 
+    }
+
+Table Product {
+    id INTEGER [primary key]
+    name VARCHAR 
+    unit_price FLOAT 
+    }
+
+Table Supplier {
+    id INTEGER [primary key]
+    name VARCHAR 
+    contact_info VARCHAR 
+    }
+
+Table Item {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    product_id INTEGER 
+    quantity INTEGER 
+    unit_price FLOAT 
+    amount FLOAT 
+    }
+
+Table Order {
+    id INTEGER [primary key]
+    customer_id INTEGER 
+    order_date DATETIME 
+    amount_total FLOAT 
+    notes TEXT 
+    date_shipped DATETIME 
+    }
+
+Table Payment {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    payment_date DATETIME 
+    amount FLOAT 
+    }
+
+Table Return {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    return_date DATETIME 
+    reason TEXT 
+    }
+
+Table Review {
+    id INTEGER [primary key]
+    product_id INTEGER 
+    customer_id INTEGER 
+    rating INTEGER 
+    comment TEXT 
+    }
+
+Table Shipment {
+    id INTEGER [primary key]
+    order_id INTEGER 
+    shipment_date DATETIME 
+    status VARCHAR 
+    }
+
+
+
+// Relationships
+    Ref: Address.(customer_id) < Customer.(id)
+    Ref: Inventory.(product_id) < Product.(id)
+    Ref: Inventory.(supplier_id) < Supplier.(id)
+    Ref: Item.(order_id) < Order.(id)
+    Ref: Item.(product_id) < Product.(id)
+    Ref: Order.(customer_id) < Customer.(id)
+    Ref: Payment.(order_id) < Order.(id)
+    Ref: Return.(order_id) < Order.(id)
+    Ref: Review.(customer_id) < Customer.(id)
+    Ref: Review.(product_id) < Product.(id)
+    Ref: Shipment.(order_id) < Order.(id)
